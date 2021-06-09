@@ -1,144 +1,218 @@
-// declaring variables
+// set var
+var citiesListArr = [];
+var numOfCities = 8;
+var personalAPIKey = "appid=7c42887d53503500bc9a50f4a1c5e31f";
+var unit = "units=imperial";
+var dailyWeatherApiStarts =
+  "https://api.openweathermap.org/data/2.5/weather?q=";
+var dailyUVIndexApiStarts = "https://api.openweathermap.org/data/2.5/uvi?";
+var forecastWeatherApiStarts =
+  "https://api.openweathermap.org/data/2.5/onecall?";
+var searchCityForm = $("#searchCityForm");
+var searchedCities = $("#searchedCityLi");
+// Getting weather API info
+var getCityWeather = function (searchCityName) {
+    // format URL
+    var apiUrl =
+      dailyWeatherApiStarts + searchCityName + "&" + personalAPIKey + "&" + unit;
+    // make a request to url
+    fetch(apiUrl).then(function (response) {
+      if (response.ok) {
+        return response.json().then(function (response) {
+          $("#cityName").html(response.name);
+          // displaying the date
+          var unixTime = response.dt;
+          var date = moment.unix(unixTime).format("MM/DD/YY");
+          $("#currentdate").html(date);
+          // displaying the weather icon
+          var weatherIncoUrl =
+            "http://openweathermap.org/img/wn/" +
+            response.weather[0].icon +
+            "@2x.png";
+          $("#weatherIconToday").attr("src", weatherIncoUrl);
+          $("#tempToday").html(response.main.temp + " \u00B0F");
+          $("#humidityToday").html(response.main.humidity + " %");
+          $("#windSpeedToday").html(response.wind.speed + " MPH");
+          // returning lat/long for UV index
+          var lat = response.coord.lat;
+          var lon = response.coord.lon;
+          getUVIndex(lat, lon);
+          getForecast(lat, lon);
+        });
+      } else {
+        alert("Please provide a valid city name.");
+      }
+    });
+  };
+  var getUVIndex = function (lat, lon) {
+    // formate the OpenWeather api url
+    var apiUrl =
+      dailyUVIndexApiStarts +
+      personalAPIKey +
+      "&lat=" +
+      lat +
+      "&lon=" +
+      lon +
+      "&" +
+      unit;
+    fetch(apiUrl)
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (response) {
+        // remove all class background
+        $("#UVIndexToday").removeClass();
+        $("#UVIndexToday").html(response.value);
+        if (response.value < 3) {
+          $("#UVIndexToday").addClass("p-1 rounded bg-success text-white");
+        } else if (response.value < 8) {
+          $("#UVIndexToday").addClass("p-1 rounded bg-warning text-white");
+        } else {
+          $("#UVIndexToday").addClass("p-1 rounded bg-danger text-white");
+        }
+      });
+  };
 
-var city=""; 
-var url="";
-var key="";
-var urlAddingCityandKey ="";
-var currenturl = "";
-var SearchedCities = document.getElementById("searchedcities");
-// var lat = weather.coord.lat;
-// var lon = weather.coord.lon;
-
-//setting an empty array
-let cities = []; 
-init(); 
-listClicker(); 
-searchClicker(); 
-
-//this function takes saved cities from local storage and fills the array with it
-function init(){
-    let savedcities = JSON.parse(localStorage.getItem("cities"));
-
-    if (savedcities !== null){
-        cities = savedcities
-    }   
-    
-    renderButtons(); 
-}
-
-//this function sets localstorage for searched cities
-function SaveDisplaySearchedCities(){
-    localStorage.setItem("cities", JSON.stringify(cities)); 
-}
-
-
-// this function turns each searched city into a button
-function renderButtons(){
-    SearchedCities.innerHTML = ""; 
-    if(cities == null){
-        return;
+  var getForecast = function (lat, lon) {
+    // format the URL
+    var apiUrl =
+      forecastWeatherApiStarts +
+      "lat=" +
+      lat +
+      "&lon=" +
+      lon +
+      "&exclude=current,minutely,hourly" +
+      "&" +
+      personalAPIKey +
+      "&" +
+      unit;
+    fetch(apiUrl)
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (response) {
+        for (var i = 1; i < 6; i++) {
+          //display date
+          var unixTime = response.daily[i].dt;
+          var date = moment.unix(unixTime).format("MM/DD/YY");
+          $("#Date" + i).html(date);
+          // display weather icon
+          var weatherIncoUrl =
+            "http://openweathermap.org/img/wn/" +
+            response.daily[i].weather[0].icon +
+            "@2x.png";
+          $("#weatherIconDay" + i).attr("src", weatherIncoUrl);
+          // display temperature
+          var temp = response.daily[i].temp.day + " \u00B0F";
+          $("#tempDay" + i).html(temp);
+          // display humidity
+          var humidity = response.daily[i].humidity;
+          $("#humidityDay" + i).html(humidity + " %");
+        }
+      });
+  };
+ 
+  //-------------------------------------- create button starts  ----------------------------------------//
+  var createButton = function (btnText) {
+    var btn = $("<button>")
+      .text(btnText)
+      .addClass("list-group-item list-group-item-action")
+      .attr("type", "submit");
+    return btn;
+  };
+  //-------------------------------------- create button ends  ------------------------------------------//
+  //---------------------- load saved citeis names from localStorage starts here ------------------------//
+  var loadSavedCity = function () {
+    citiesListArr = JSON.parse(localStorage.getItem("weatherInfo"));
+    if (citiesListArr == null) {
+      citiesListArr = [];
     }
-    let unique_cities = [...new Set(cities)];
-    for(let i=0; i < unique_cities.length; i++){
-        let cityName = unique_cities[i]; 
-
-        let buttonEl = document.createElement("button");
-        buttonEl.textContent = cityName; 
-        buttonEl.setAttribute("class", "listbtn"); 
-
-        SearchedCities.appendChild(buttonEl);
-        listClicker();
+    for (var i = 0; i < citiesListArr.length; i++) {
+      var cityNameBtn = createButton(citiesListArr[i]);
+      searchedCities.append(cityNameBtn);
+    }
+  };
+  //---------------------- load saved citeis names from localStorage ends here ------------------------//
+  //----------------------- save searched city in to local storage starts here --------------------------//
+  var saveCityName = function (searchCityName) {
+    var newcity = 0;
+    citiesListArr = JSON.parse(localStorage.getItem("weatherInfo"));
+    if (citiesListArr == null) {
+      citiesListArr = [];
+      citiesListArr.unshift(searchCityName);
+    } else {
+      for (var i = 0; i < citiesListArr.length; i++) {
+        if (searchCityName.toLowerCase() == citiesListArr[i].toLowerCase()) {
+          return newcity;
+        }
+      }
+      if (citiesListArr.length < numOfCities) {
+        // create object
+        citiesListArr.unshift(searchCityName);
+      } else {
+        // control the length of the array. do not allow to save more than 10 cities
+        citiesListArr.pop();
+        citiesListArr.unshift(searchCityName);
       }
     }
-//this is the on click function for searched cities buttons
-function listClicker(){
-$(".listbtn").on("click", function(event){
-    event.preventDefault();
-    city = $(this).text().trim();
-    APIcalls(); 
-})
-}
-
-
-
-//on click function for main search bar
-function searchClicker() {
-$("#searchbtn").on("click", function(event){
-    event.preventDefault();
-    city = $(this).prev().val().trim()
-    
-    //this pushes the city that you type in into the cities array
-    cities.push(city);
-    //this makea sure the cities array length does exceed 6
-    if(cities.length > 6){
-        cities.shift()
-    }
-    //return from function early if form is blank
-    if (city == ""){
-        return; 
-    }
-    APIcalls();
-    SaveDisplaySearchedCities(); 
-    renderButtons();
-})
-}
-
-//runs 2 API calls, current weather data five-day forecast then populates text areas
-function APIcalls(){
-    
-    url = "https://api.openweathermap.org/data/2.5/forecast?q=";    
-    currenturl = "https://api.openweathermap.org/data/2.5/weather?q=";
-    key = "&appid=7c42887d53503500bc9a50f4a1c5e31f";
-    urlAddingCityandKey = url + city + key;
-    weathertodayurl = currenturl + city + key; 
-    
-    $("#cityname").text("Today's Weather for: " + city);
-    $.ajax({
-        url: urlAddingCityandKey,
-        method: "GET",
-        
-    }).then(function(response){
-        var day_number = 0; 
-        
-        //looping
-        for(var i=0; i< response.list.length; i++){
-            
-            //split function to isolate the time from the time/data aspect of weather data, and only select weather reports for 3pm
-            if(response.list[i].dt_txt.split(" ")[1] == "15:00:00")
-            {
-                //if time of report is 3pm, populate text areas accordingly
-                var day = response.list[i].dt_txt.split("-")[2].split(" ")[0];
-                var month = response.list[i].dt_txt.split("-")[1];
-                var year = response.list[i].dt_txt.split("-")[0];
-                $("#" + day_number + "date").text(month + "/" + day + "/" + year); 
-                var temp = Math.round(((response.list[i].main.temp - 273.15) *9/5+32));
-                $("#" + day_number + "tempfiveday").text("Temp: " + temp + String.fromCharCode(176)+"F");
-                $("#" + day_number + "humidityfiveday").text("Humidity: " + response.list[i].main.humidity);
-                $("#" + day_number + "fivedaypic").attr("src", "http://openweathermap.org/img/w/" + response.list[i].weather[0].icon + ".png");
-                console.log(response.list[i].dt_txt.split("-"));
-                console.log(day_number);
-                console.log(response.list[i].main.temp);
-                day_number++; 
-                        }   
+    localStorage.setItem("weatherInfo", JSON.stringify(citiesListArr));
+    newcity = 1;
+    return newcity;
+  };
+  //------------------------ save searched city in to local storage ends here ---------------------------//
+  //-------------------------- create button with searched city starts here -----------------------------//
+  var createSearchedCityButton = function (searchCityName) {
+    var saveCities = JSON.parse(localStorage.getItem("weatherInfo"));
+    // check the searchCityName parameter against all children of citiesListArr
+    if (saveCities.length == 1) {
+      var cityNameBtn = createButton(searchCityName);
+      searchedCities.prepend(cityNameBtn);
+    } else {
+      for (var i = 1; i < saveCities.length; i++) {
+        if (searchCityName.toLowerCase() == saveCities[i].toLowerCase()) {
+          return;
         }
-    });
-
-
-    //displays data in main div 
-     $.ajax({
-         url:weathertodayurl,
-         method: "GET", 
-     }).then(function(current_data){
-         console.log(current_data);
-         var temp = Math.round(((current_data.main.temp - 273.15) * 9/5 + 32))
-         console.log("The temperature in " + city + " is: " + temp);
-         $("#temptoday").text("Temperature: " + temp + String.fromCharCode(176)+"F");
-         $("#humiditytoday").text("Humidity: " + current_data.main.humidity);
-         $("#windspeedtoday").text("Wind Speed: " + current_data.wind.speed);
-        //  $("#uvindextoday").text("UV index: " + current_data.uv.index);
-         $("#icontoday").attr({"src": "http://openweathermap.org/img/w/" + current_data.weather[0].icon + ".png",
-          "height": "100px", "width":"100px"});
-     })
-    
-
-}
+      }
+      // check whether there are already have too many elements in this list of button
+      if (searchedCities[0].childElementCount < numOfCities) {
+        var cityNameBtn = createButton(searchCityName);
+      } else {
+        searchedCities[0].removeChild(searchedCities[0].lastChild);
+        var cityNameBtn = createButton(searchCityName);
+      }
+      searchedCities.prepend(cityNameBtn);
+      $(":button.list-group-item-action").on("click", function () {
+        BtnClickHandler(event);
+      });
+    }
+  };
+  
+  //------------------------------------- call functions directly ---------------------------------------//
+  loadSavedCity();
+ 
+  //--------------------------- event handler from submit form starts here ------------------------------//
+  var formSubmitHandler = function (event) {
+    event.preventDefault();
+    // name of the city
+    var searchCityName = $("#searchCity").val().trim();
+    var newcity = saveCityName(searchCityName);
+    getCityWeather(searchCityName);
+    if (newcity == 1) {
+        createSearchedCityButton(searchCityName);
+    }
+  };
+  var BtnClickHandler = function (event) {
+    event.preventDefault();
+    // name of the city
+    var searchCityName = event.target.textContent.trim();
+    getCityWeather(searchCityName);
+  };
+  //--------------------------- event handler from submit form ends here ------------------------------//
+  //------------------------ call functions with submit button starts here ----------------------------//
+  $("#searchCityForm").on("submit", function () {
+    formSubmitHandler(event);
+  });
+  $(":button.list-group-item-action").on("click", function () {
+    BtnClickHandler(event);
+  });
+  //-------------------------- call functions with submit button ends here ----------------------------//

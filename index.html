@@ -1,93 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Weather Forecast</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!--bootstrap link-->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+    <!--fontawesome link-->
+    <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+      integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
+      crossorigin="anonymous"
+    />
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link href="style.css" rel="stylesheet" type="text/css">
-    <script src="https://kit.fontawesome.com/4439e3b362.js" crossorigin="anonymous"></script>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300&display=swap" rel="stylesheet">
-</head>
-<body>
-    <header id="header" class="container-fluid  pt-3 pb-3 text-center"><h1 class="text-white">Weather Dashboard</h1></header>
+    <title>Weather Dashboard</title>
+  </head>
+  <body>
 
-    <div class="container-fluid row">
-            <div class="col-3 left_div justify-content-center pt-3">
-                    <div class="search_div mb-4">
-                    <h5 class="justify-content-center pt-2 pl-3">Search by city: </h5>
-                        <form class="form-inline my-2 my-lg-0 mt-3 ml-3">
-                                <input class="form-control mr-sm-2 float-left" type="search" placeholder="Search" id= "search_bar" aria-label="Search">
-                                <button id="searchbtn" class="btn btn-outline-light my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
-                        </form>
-                    </div>
-                    <h5 class="justify-content-center pt-2 pl-3">Your previously searched cities: </h5>
-                    <div class="container my-3 col-12" id="searchedcities">
-                    </div>
-                   </div>
-            
-        <div class="today_weather col-9 pt-3">
-                <div class="bg-light p-3">
-                        <h2 class="justify-content-center text-dark" id="cityname"> </h2>
-                        <img id="icontoday" src="">
-                        <div class="row">
-                            <div class="col-6">
-                                <p id="temptoday"></p>
-                                <p id="humiditytoday"></p>
-                                <p id="windspeedtoday"></p>
-                                <p id="uvindextoday"></p>  
-                            </div>
-                        </div> 
-                    </div>  
+ <div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Weather Dashboard</h1>
+    <p class="lead">Get your 1 or 5 day Weather Forecast!</p>
+  </div>
+</div>
 
-            <div class="five-day-div bg-light p-3 m-3 w-100">
-                    <div class="bg-light">
-                        <h5 class="text-dark">5 Day Forecast</h5>
-                    </div>
-                <div class="row justify-content-center">
-                    <div id="day0" class="card-body mx-2 my-2">
-                        <h5 id="0date"></h5>
-                        <img id="0fivedaypic" src="">
-                        <p id="0tempfiveday"></p>
-                        <p id="0humidityfiveday"></p>
-                        
-                    </div>
-                    <div id="day1" class="card-body mx-2 my-2">
-                            <h5 id="1date"></h5>
-                            <img id="1fivedaypic" src="">
-                            <p id="1tempfiveday"></p>
-                            <p id="1humidityfiveday"></p>
-                            
-                    </div>
-                    <div id="day2" class="card-body mx-2 my-2"> 
-                            <h5 id="2date"></h5>
-                            <img id="2fivedaypic" src="">
-                            <p id="2tempfiveday"></p>
-                            <p id="2humidityfiveday"></p>
-                            
-                    </div>
-                    <div id="day3" class="card-body mx-2 my-2">
-                            <h5 id="3date"></h5>
-                            <img id="3fivedaypic" src="">
-                            <p id="3tempfiveday"></p>
-                            <p id="3humidityfiveday"></p>
-                            
-                    </div>
-                    <div id="day4" class="card-body mx-2 my-2">
-                            <h5 id="4date"></h5>
-                            <img id="4fivedaypic" src="">
-                            <p id="4tempfiveday"></p>
-                            <p id="4humidityfiveday"></p>
-                            
-                    </div>
-                </div>
+
+    <main>
+      <div class="row min-vh-100 no-gutters">
+        <section class="col-12 col-lg-3 bg-light py-4 mblank-0 d-flex flex-column" id="serach-from">
+          <form class="form-group" id="searchCityForm">
+            <label for="searchCity" class="col col-12"> Please Search for a City: </label>
+             <!--search textbox-->
+            <div class="form-check-inline col col-12 px-3">
+              <input
+                type="text"
+                class="form-input"
+                id="searchCity"
+                autofocus="true"
+                aria-describedby="searchCity"
+              />
+              <!--search button-->
+              <button type="submit" class="btn btn-primary" id="searchCityForm">
+                <span class="fas fa-search"></span>
+              </button>
             </div>
-        </div>
-     </div>
-        </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+          </form>
+          <!--list of searched cities-->
+          <li class="list-group col col-12 d-none d-lg-block px-3" id="searchedCityLi"></li>
+        </section>
+       <!--section to display initial weather search 1 day-->
+        <section class="col-12 col-lg-9 mt-3 d-flex flex-column px-3" id="display-weather-info">
+          <div class="card">
+            <div class="card-body">
+              <h2 class="card-title d-flex align-items-center lead font-weight-bold" style="height: 100px">
+                <span id="cityName">Name of City</span>
+                <span class="px-3" id="currentdate"> MM/DD/YY</span>
+                <img class="weather-icon" id="weatherIconToday" src="">
+                </img>
+              </h2>
+              <p class="card-text">
+                Temperature:
+                <span id="tempToday">--</span>
+              </p>
+              <p class="card-text">
+                Humidity:
+                <span id="humidityToday">--</span>
+              </p>
+              <p class="card-text">
+                Wind Speed:
+                <span id="windSpeedToday">--</span>
+              </p>
+              <p class="card-text">
+                UV Index:
+                <span id="UVIndexToday">--</span>
+              </p>
+            </div>
+          </div>
+              <!--section to display 5 day forecast city below-->
+          <div class="px-3">
+            <h2 class="card-title d-flex align-items-center lead font-weight-bold mt-3" style="height: 50px">
+              5-Day Forecast:
+            </h2>
+               <!--Day 1 od 5-->
+            <div class="row justify-content-between">
+              <div class="col-sm-2 card-body bg-primary text-white rounded mb-3">
+                <p class="card-title font-weight-bold" id="Date1">MM/DD/YY</p>
+                <p class="card-text" style="height: 100px">
+                  <img class="weather-icon" id="weatherIconDay1" src="">
+                </img>
+                </p>
+                <p class="card-text">Temp:
+                  <spanid id="tempDay1">--</span>
+                </p>
+                <p class="card-text">Humidity:
+                  <span id="humidityDay1">--</span>
+                </p>
+              </div>
+                 <!--Day 2 od 5-->
+              <div class="col-sm-2 card-body bg-primary text-white rounded mb-3">
+                <p class="card-title font-weight-bold" id="Date2">MM/DD/YY</p>
+                <p class="card-text" style="height: 100px">
+                  <img class="weather-icon" id="weatherIconDay2" src="">
+                </img>
+                </p>
+                <p class="card-text">Temp:
+                  <spanid id="tempDay2">--</span>
+                </p>
+                <p class="card-text">Humidity:
+                  <span id="humidityDay2">--</span>
+                </p>
+              </div>
+                 <!--Day 3 od 5-->
+              <div class="col-sm-2 card-body bg-primary text-white rounded mb-3">
+                <p class="card-title font-weight-bold" id="Date3">MM/DD/YY</p>
+                <p class="card-text" style="height: 100px">
+                  <img class="weather-icon" id="weatherIconDay3" src="">
+                </img>
+                </p>
+                <p class="card-text">Temp:
+                  <spanid id="tempDay3">--</span>
+                </p>
+                <p class="card-text">Humidity:
+                  <span id="humidityDay3">--</span>
+                </p>
+              </div>
+               <!--Day 4 of 5-->
+              <div class="col-sm-2 card-body bg-primary text-white rounded mb-3">
+                <p class="card-title font-weight-bold" id="Date4">MM/DD/YY</p>
+                <p class="card-text" style="height: 100px">
+                  <img class="weather-icon" id="weatherIconDay4"  src="">
+                </img>
+                </p>
+                <p class="card-text">Temp:
+                  <spanid id="tempDay4">--</span>
+                </p>
+                <p class="card-text">Humidity:
+                  <span id="humidityDay4">--</span>
+                </p>
+              </div>
+               <!--Day 5 of 5-->
+              <div class="col-sm-2 card-body bg-primary text-white rounded mb-3">
+                <p class="card-title font-weight-bold" id="Date5">MM/DD/YY</p>
+                <p class="card-text" style="height: 100px">
+                  <img class="weather-icon" id="weatherIconDay5" src="">
+                </img>
+                </p>
+                <p class="card-text">Temp:
+                  <spanid id="tempDay5">--</span>
+                </p>
+                <p class="card-text">Humidity:
+                  <span id="humidityDay5">--</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!--JQuery related script-->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <!--moment related script-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <!--own script-->
     <script src="script.js"></script>
-</body>
+  </body>
 </html>
+© 2021 GitHub, Inc.
