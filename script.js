@@ -1,4 +1,4 @@
-// set var
+// setting my variables 
 var citiesListArr = [];
 var numOfCities = 8;
 var personalAPIKey = "appid=7c42887d53503500bc9a50f4a1c5e31f";
@@ -10,7 +10,8 @@ var forecastWeatherApiStarts =
   "https://api.openweathermap.org/data/2.5/onecall?";
 var searchCityForm = $("#searchCityForm");
 var searchedCities = $("#searchedCityLi");
-// Getting weather API info
+
+// getting weather api info
 var getCityWeather = function (searchCityName) {
     // format URL
     var apiUrl =
@@ -44,6 +45,8 @@ var getCityWeather = function (searchCityName) {
       }
     });
   };
+
+ //this is getting the UVI index
   var getUVIndex = function (lat, lon) {
     // formate the OpenWeather api url
     var apiUrl =
@@ -60,7 +63,6 @@ var getCityWeather = function (searchCityName) {
         return response.json();
       })
       .then(function (response) {
-        // remove all class background
         $("#UVIndexToday").removeClass();
         $("#UVIndexToday").html(response.value);
         if (response.value < 3) {
@@ -112,7 +114,7 @@ var getCityWeather = function (searchCityName) {
       });
   };
  
-  //-------------------------------------- create button starts  ----------------------------------------//
+  // this function helps create the buttons
   var createButton = function (btnText) {
     var btn = $("<button>")
       .text(btnText)
@@ -120,8 +122,8 @@ var getCityWeather = function (searchCityName) {
       .attr("type", "submit");
     return btn;
   };
-  //-------------------------------------- create button ends  ------------------------------------------//
-  //---------------------- load saved citeis names from localStorage starts here ------------------------//
+
+  //loads saved cities
   var loadSavedCity = function () {
     citiesListArr = JSON.parse(localStorage.getItem("weatherInfo"));
     if (citiesListArr == null) {
@@ -132,8 +134,8 @@ var getCityWeather = function (searchCityName) {
       searchedCities.append(cityNameBtn);
     }
   };
-  //---------------------- load saved citeis names from localStorage ends here ------------------------//
-  //----------------------- save searched city in to local storage starts here --------------------------//
+
+  //saves searched cities to local storage
   var saveCityName = function (searchCityName) {
     var newcity = 0;
     citiesListArr = JSON.parse(localStorage.getItem("weatherInfo"));
@@ -159,8 +161,8 @@ var getCityWeather = function (searchCityName) {
     newcity = 1;
     return newcity;
   };
-  //------------------------ save searched city in to local storage ends here ---------------------------//
-  //-------------------------- create button with searched city starts here -----------------------------//
+
+  //creates buttons with the searched cities inside of them
   var createSearchedCityButton = function (searchCityName) {
     var saveCities = JSON.parse(localStorage.getItem("weatherInfo"));
     // check the searchCityName parameter against all children of citiesListArr
@@ -173,7 +175,7 @@ var getCityWeather = function (searchCityName) {
           return;
         }
       }
-      // check whether there are already have too many elements in this list of button
+      // this checks to see if there are already too many elements in the button list
       if (searchedCities[0].childElementCount < numOfCities) {
         var cityNameBtn = createButton(searchCityName);
       } else {
@@ -187,10 +189,9 @@ var getCityWeather = function (searchCityName) {
     }
   };
   
-  //------------------------------------- call functions directly ---------------------------------------//
   loadSavedCity();
  
-  //--------------------------- event handler from submit form starts here ------------------------------//
+  // this is the event handler to submit the form
   var formSubmitHandler = function (event) {
     event.preventDefault();
     // name of the city
@@ -207,12 +208,11 @@ var getCityWeather = function (searchCityName) {
     var searchCityName = event.target.textContent.trim();
     getCityWeather(searchCityName);
   };
-  //--------------------------- event handler from submit form ends here ------------------------------//
-  //------------------------ call functions with submit button starts here ----------------------------//
+
+  // this calls the functions with the submit button
   $("#searchCityForm").on("submit", function () {
     formSubmitHandler(event);
   });
   $(":button.list-group-item-action").on("click", function () {
     BtnClickHandler(event);
   });
-  //-------------------------- call functions with submit button ends here ----------------------------//
