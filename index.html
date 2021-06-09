@@ -20,18 +20,16 @@
     <title>Weather Dashboard</title>
   </head>
   <body>
-
- <div class="jumbotron jumbotron-fluid">
+      <!--jumbotron header-->
+ <div class="jumbotron jumbotron-fluid bg-primary text-white rounded">
   <div class="container">
     <h1 class="display-4">Weather Dashboard</h1>
     <p class="lead">Get your 1 or 5 day Weather Forecast!</p>
   </div>
 </div>
-
-
     <main>
       <div class="row min-vh-100 no-gutters">
-        <section class="col-12 col-lg-3 bg-light py-4 mblank-0 d-flex flex-column" id="serach-from">
+        <section class="col-12 col-lg-3 bg-light py-4 mblank-0 d-flex flex-column" id="searchfrm">
           <form class="form-group" id="searchCityForm">
             <label for="searchCity" class="col col-12"> Please Search for a City: </label>
              <!--search textbox-->
@@ -85,7 +83,7 @@
             <h2 class="card-title d-flex align-items-center lead font-weight-bold mt-3" style="height: 50px">
               5-Day Forecast:
             </h2>
-               <!--Day 1 od 5-->
+               <!--Day 1 of 5-->
             <div class="row justify-content-between">
               <div class="col-sm-2 card-body bg-primary text-white rounded mb-3">
                 <p class="card-title font-weight-bold" id="Date1">MM/DD/YY</p>
@@ -100,7 +98,7 @@
                   <span id="humidityDay1">--</span>
                 </p>
               </div>
-                 <!--Day 2 od 5-->
+                 <!--Day 2 of 5-->
               <div class="col-sm-2 card-body bg-primary text-white rounded mb-3">
                 <p class="card-title font-weight-bold" id="Date2">MM/DD/YY</p>
                 <p class="card-text" style="height: 100px">
@@ -114,7 +112,7 @@
                   <span id="humidityDay2">--</span>
                 </p>
               </div>
-                 <!--Day 3 od 5-->
+                 <!--Day 3 of 5-->
               <div class="col-sm-2 card-body bg-primary text-white rounded mb-3">
                 <p class="card-title font-weight-bold" id="Date3">MM/DD/YY</p>
                 <p class="card-text" style="height: 100px">
