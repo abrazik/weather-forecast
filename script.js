@@ -162,32 +162,32 @@ var getCityWeather = function (searchCityName) {
     return newcity;
   };
 
-  //creates buttons with the searched cities inside of them
-  var createSearchedCityButton = function (searchCityName) {
-    var saveCities = JSON.parse(localStorage.getItem("weatherInfo"));
-    // check the searchCityName parameter against all children of citiesListArr
-    if (saveCities.length == 1) {
-      var cityNameBtn = createButton(searchCityName);
-      searchedCities.prepend(cityNameBtn);
-    } else {
-      for (var i = 1; i < saveCities.length; i++) {
-        if (searchCityName.toLowerCase() == saveCities[i].toLowerCase()) {
-          return;
-        }
-      }
-      // this checks to see if there are already too many elements in the button list
-      if (searchedCities[0].childElementCount < numOfCities) {
-        var cityNameBtn = createButton(searchCityName);
-      } else {
-        searchedCities[0].removeChild(searchedCities[0].lastChild);
-        var cityNameBtn = createButton(searchCityName);
-      }
-      searchedCities.prepend(cityNameBtn);
-      $(":button.list-group-item-action").on("click", function () {
-        BtnClickHandler(event);
-      });
-    }
-  };
+  // //creates buttons with the searched cities inside of them
+  // var createSearchedCityButton = function (searchCityName) {
+  //   var saveCities = JSON.parse(localStorage.getItem("weatherInfo"));
+  //   // check the searchCityName parameter against all children of citiesListArr
+  //   if (saveCities.length == 1) {
+  //     var cityNameBtn = createButton(searchCityName);
+  //     searchedCities.prepend(cityNameBtn);
+  //   } else {
+  //     for (var i = 1; i < saveCities.length; i++) {
+  //       if (searchCityName.toLowerCase() == saveCities[i].toLowerCase()) {
+  //         return;
+  //       }
+  //     }
+  //     // this checks to see if there are already too many elements in the button list
+  //     if (searchedCities[0].childElementCount < numOfCities) {
+  //       var cityNameBtn = createButton(searchCityName);
+  //     } else {
+  //       searchedCities[0].removeChild(searchedCities[0].lastChild);
+  //       var cityNameBtn = createButton(searchCityName);
+  //     }
+  //     searchedCities.prepend(cityNameBtn);
+  //     $(":button.list-group-item-action").on("click", function () {
+  //       BtnClickHandler(event);
+  //     });
+  //   }
+  // };
   
   loadSavedCity();
  
